@@ -2,56 +2,63 @@ package org.example;
 
 import java.util.Arrays;
 
-public class MyArrayList {
-    private Object[] myArray;
+public class MyArrayList<T> {
+    private static final int DEFAULT_CAPACITY = 10;
+    private Object[] elements;
     private int size;
-    private static final int DEF = 10;
 
     public MyArrayList() {
-        myArray = new Object[DEF];
+        elements = new Object[DEFAULT_CAPACITY];
         size = 0;
     }
 
-    public void add(Object element) {
-        if (size == myArray.length) {
-            myArray = Arrays.copyOf(myArray, myArray.length * 2);
-        }
-        myArray[size++] = element;
+    public void add(T element) {
+        ensureCapacity();
+        elements[size++] = element;
     }
 
-    public void add(int index, Object element) {
-        if (index < 0  index > size) {
-            throw new IndexOutOfBoundsException();
+    public void add(int index, T element) {
+        ensureCapacity();
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index is out of bounds");
         }
-        if (size == myArray.length) {
-            myArray = Arrays.copyOf(myArray, myArray.length * 2);
-        }
-        System.arraycopy(myArray, index, myArray, index + 1, size - index);
-        myArray[index] = element;
+
+        System.arraycopy(elements, index, elements, index + 1, size - index);
+        elements[index] = element;
         size++;
     }
 
-    public Object get(int index) {
-        if (index < 0  index >= size) {
-            throw new IndexOutOfBoundsException();
+    @SuppressWarnings("unchecked")
+    public T get(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index is out of bounds");
         }
-        return myArray[index];
+        return (T) elements[index];
     }
 
     public void remove(int index) {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("Index is out of bounds");
         }
-        System.arraycopy(myArray, index + 1, myArray, index, size - index - 1);
-        size--;
+
+        System.arraycopy(elements, index + 1, elements, index, size - index - 1);
+        elements[--size] = null;
     }
 
     public void clear() {
-        myArray = new Object[DEF];
+        Arrays.fill(elements, null);
         size = 0;
     }
 
-    public void sort() {
-        Arrays.sort(myArray, 0, size);
+    public void sort(Comparator<? super T> comparator) {
+        Arrays.sort(elements, 0, size, comparator);
     }
+
+    private void ensureCapacity() {
+        if (size == elements.length) {
+            int newCapacity = elements.length * 2;
+            elements = Arrays.copyOf(elements, newCapacity);
+        }
+    }
+
 }
