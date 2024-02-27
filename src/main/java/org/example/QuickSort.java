@@ -21,6 +21,7 @@ public class QuickSort<T> {
 
         int i = low, j = high;
         while (i <= j) {
+
             while (comparator.compare(arr[i], pivot) < 0) {
                 i++;
             }

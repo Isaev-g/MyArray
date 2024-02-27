@@ -69,7 +69,5 @@ public class MyArrayListTest {
         };
 
         list.sort(comparator);
-
-
     }
 }
