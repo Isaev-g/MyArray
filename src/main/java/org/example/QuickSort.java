@@ -2,20 +2,16 @@ package org.example;
 
 import java.util.Comparator;
 
-//Класс QuickSort реализует быструю сортировку массива элементов типа T
-
-
 public class QuickSort<T> {
 
-    public void quickSort(T[] arr, Comparator<? super T> comparator) {;
-        quickSort(arr, 0, arr.length - 1, comparator);
-    }
-
-    private void quickSort(T[] arr, int low, int high, Comparator<? super T> comparator) {
+    public void quickSort(T[] arr, Comparator<? super T> comparator) {
         if (arr == null || arr.length == 0) {
             return;
         }
+        sort(arr, 0, arr.length - 1, comparator);
+    }
 
+    private void sort(T[] arr, int low, int high, Comparator<? super T> comparator) {
         if (low >= high) {
             return;
         }
@@ -34,20 +30,23 @@ public class QuickSort<T> {
             }
 
             if (i <= j) {
-                T temp = arr[i];
-                arr[i] = arr[j];
-                arr[j] = temp;
+                swap(arr, i, j);
                 i++;
                 j--;
             }
         }
 
         if (low < j) {
-            quickSort(arr, low, j, comparator);
+            sort(arr, low, j, comparator);
         }
-
         if (high > i) {
-            quickSort(arr, i, high, comparator);
+            sort(arr, i, high, comparator);
         }
+    }
+
+    private void swap(T[] arr, int i, int j) {
+        T temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
     }
 }
